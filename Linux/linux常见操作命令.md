@@ -1,0 +1,24 @@
+
+
+- 解压：
+-     tar xvfz xxx.tar.gz.
+- 压缩：
+-     tar czf xxx.tar.gz xxxx
+- 查看磁盘:
+-     du –sh *；df –sh//
+- 查看端口:
+-     Netstat –apn | grep 8080
+- 查看带有tomcat关键字的进程:
+-     ps -ef |grep tomcat
+- 关闭进程
+-     kill 进程ID号
+-     kill -9 (强制杀进程)
+- 修改档案属性
+-     chmod -R 777 dir
+-     chown [-R] 账号名称:组名 档案戒目彔 
+- 统计行数
+-      wc -w xx.txt
+- 写入或者追加重定向
+-      echo "1" >/>> 1.txt
+- 查看随系统一起启动的服务
+-     chkconfig  --list

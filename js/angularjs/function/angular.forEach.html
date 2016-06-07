@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../../vendor/jquery/jquery.min.js"></script>
+    <script src="../../../vendor/angular-1.4.8/angular.min.js"></script>
+</head>
+<body>
+<script>
+    var values = {name: 'misko', gender: 'male'};
+    var log = [];
+    angular.forEach(values, function(value, key) {
+        this.push(key + ': ' + value);
+        display(key + ': ' + value);
+    }, log);
+    display(log);
+
+    function display(msg) {
+        $("<p>").html(String(msg)).appendTo(document.body);
+    }
+
+</script>
+</body>
+</html>

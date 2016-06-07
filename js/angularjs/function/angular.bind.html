@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../../vendor/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container" style="margin:20px auto">
+    <table class="table table-bordered">
+        <tr>
+            <td colspan="2" class="text-center">
+                angular.bind
+            </td>
+        </tr>
+        <tr>
+            <td>解释</td>
+            <td>返回一个调用self的函数fn（self代表fn里的this）.可以给fn提供参数args（*）.这个功能也被称为局部操作，以区别功能。</td>
+        </tr>
+        <tr>
+            <td>格式</td>
+            <td>angular.bind(self,fn,args)</td>
+        </tr>
+        <tr>
+            <td>self</td>
+            <td>object 对象； fn的上下文对象，在fn中可以用this调用</td>
+        </tr>
+        <tr>
+            <td>fn</td>
+            <td>function； 绑定的方法</td>
+        </tr>
+        <tr>
+            <td>args</td>
+            <td>传入fn的参数</td>
+        </tr>
+    </table>
+    <code style="font-size: 16px;">
+    var fn = function (Adj) { <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(this.name + "is a boy!!! And he is " + Adj + " !!!");<br>
+    };<br>
+    var f = angular.bind(obj, fn, "handsome");<br>
+    f(); <small>//Any is a boy!!! And he is handsome!!!</small><br>
+    var t = angular.bind(obj, fn);<br>
+    t("ugly");<small>//Any is a boy!!! And he is ugly!!!</small><br>
+    </code>
+</div>
+</body>
+</html>
+<script src="../../../vendor/angular-1.4.8/angular.min.js"></script>
+<script>
+    var obj = {name: "Any"};
+    var fn = function (Adj) {
+        console.log(this.name + "is a boy!!! And he is " + Adj + " !!!");
+    };
+
+    var f = angular.bind(obj, fn, "handsome");
+    f();//Any is a boy!!! And he is handsome!!!
+
+    var t = angular.bind(obj, fn);
+    t("ugly");
+</script>
