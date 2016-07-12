@@ -1,0 +1,26 @@
+{
+  "name": "imdba.github.io",
+  "version": "1.0.0",
+  "description": "blog",
+  "main": "index.js",
+  "dependencies": {
+    "bootstrap": "^3.3.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imdba/imdba.github.io.git"
+  },
+  "keywords": [
+    "IT"
+  ],
+  "author": "imdba",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imdba/imdba.github.io/issues"
+  },
+  "homepage": "https://github.com/imdba/imdba.github.io#readme"
+}
