@@ -1,0 +1,405 @@
+#设计模式
+
+##23种设计模式
+###创建型设计模式
+1. [单例模式](#1)
+2. [原型模式](#2)
+3. [建造者模式](#3)
+4. [工厂模式](#4)
+5. [抽象工厂模式](#5)
+
+###行为型设计模式
+1. [迭代器模式](#7)
+2. 解释器模式
+3. 观察者模式
+4. 中介者模式
+5. 访问者模式
+6. 备忘录模式
+7. 状态模式
+8. [策略模式](#6)
+9. 模板方法模式
+10. 命令模式
+11. 职责链模式
+
+###结构型设计模式
+1. 桥接模式
+2. 外观模式
+3. 组合模式
+4. 装饰模式
+5. 适配器模式
+6. 代理模式
+7. 享元模式
+
+##单例模式<a name="1"></a>
+单例模式让类保证它自己仅有一个实例，并提供一个可访问它的全局访问点
+
+单例模式是一种常用的模式，有一些对象我们往往只需要一个，比如线程池、全局缓存、浏览器的window对象。
+
+```javascript
+var get_currrent_user = function(){
+	if (typeof $rootScope.current_user !== 'undefined') {
+	    return $q(function (resolve) {
+	        resolve($rootScope.current_user);
+	    });
+	} else {
+	    return $http.get('/auth/check').then(function (resp) {
+	        $rootScope.current_user = resp.data;
+	        return resp.data;
+	    })
+	}
+}
+```
+
+
+
+##原型模式<a name="2"></a>
+通过clone原型创建新的对象，不需要知道任何创建的细节。
+
+```
+function Person(){}
+Person.prototype.name ="Nicholas";
+
+var person1 = new Person();
+var person2 = new Person();
+person1.name ="Greg";
+alert(person1.name);//"Greg"——来自实例
+alert(person2.name);//"Nicholas"——来自原型
+delete person1.name;
+alert(person1.name);//"Nicholas"——来自原型
+
+```
+
+
+##建造者模式<a name="3"></a>
+将一个复杂对象的 构造 与它的表示相分离，使同样的创建过程可有不同的表示，这就叫做建造者模式
+
+```
+#建造者
+function workerBuilder() {
+    this.workOne = function() {
+         //建房子骨架
+    }
+    this.workTwo=function() {
+         //建睡房
+    }
+    this.workThree=function() {
+         //建厨房
+    }
+    this.workFour=function() {
+         //建客厅
+    }
+    //....
+    
+    this.getResult = function() {
+         //建成房子
+　　　　　var house = new House();
+　　　　　//house.HouseFrame ...
+　　　　　return house;　
+    }
+}
+
+##指挥者
+function Director() {
+     this.construct = function(builder) {
+          builder.workOne();
+          builder.workTwo();
+          builder.workThree();
+          builder.workFour();
+          //...
+          //上面的内容，顺序可设置，并且工作项也可以设定
+     }
+}
+
+##房子
+var builder = new workBuilder();
+var director = new Director();
+director.construct(builder);
+
+var house = builder.getResult();
+
+```
+建造者模式比较适于那种，内容[抽象]复杂，实际场景表现又多个不一样，比如工作内容或顺序不一致的情况；
+
+比如每个人每天的生活过程，还有像上面的实例类似的场景；
+
+通过指导者层，可以减少对很多相似工作场合，但工作规则顺序不一致的环境；
+
+可以大减少对实际对象的建造抽象
+
+##工厂模式<a name="4"></a>
+定义一个用于创建对象的接口，让子类决定实例化哪一个类
+
+```
+function showColor() {
+  	alert(this.color);
+}
+
+function createCar(sColor,iDoors) {
+	  var oTempCar = new Object;
+	  oTempCar.color = sColor;
+	  oTempCar.doors = iDoors;
+	  oTempCar.showColor = showColor;
+	  return oTempCar;
+}
+
+var oCar1 = createCar("red",4);
+var oCar2 = createCar("blue",2);
+
+oCar1.showColor();        //输出 "red"
+oCar2.showColor();        //输出 "blue"
+```
+
+
+1. 工厂方法模式的问题: 在工厂方法模式里，创建类都需要通过 工厂类，如果要扩展程序，就必须修改工厂类，这违背了闭包原则，对扩展开放，对修改关闭；对于设计有一定的问题。
+
+2. 如何解决：就要用到抽象工厂模式，就是对功能类单独创建工厂类，这样就不必修改之前的代码，又扩展了功能。
+
+
+##抽象工厂模式<a name="5"></a>
+提供一个创建一系列相关或相互依赖对象的接口，而无需指定它们具体的类。
+
+抽象类是一种声明但是不能使用的类。
+
+在一些大型的项目中，总会有一些子类去继承另一些父类，父类定义一些方法缺没有具体的实现，一旦子类创建了一个对象，没有重写就会给出一些提示信息。
+
+抽象工厂模式除了具有工厂方法模式的优点外，最主要的优点就是可以在类的内部对产品族进行约束。
+
+ps : 抽象工厂模式其实在javascript中并没有什么用
+
+```php
+<?php
+
+/**
+ * 抽象产品A
+ */
+interface AbstractProductA {
+ 
+    /**
+     * 取得产品名
+     */
+    public function getName();
+}
+ 
+/**
+ * 抽象工厂
+ */
+interface AbstractFactory {
+    /**
+     * 创建等级结构为A的产品的工厂方法
+     */
+    public function createProductA();
+ 
+}
+
+/**
+ * 具体工厂
+ */
+class ConcreteFactory implements AbstractFactory{
+ 
+    public function createProductA() {
+        return new ProductA1();
+    }
+}
+ 
+/**
+ * 具体产品Ａ
+ */
+class ProductA implements AbstractProductA {
+    private $_name;
+ 
+    public function __construct() {
+        $this->_name = 'product A';
+    }
+ 
+    public function getName() {
+        return $this->_name;
+    }
+}
+ 
+ 
+/**
+ * 客户端
+ */
+class Client {
+ 
+     /**
+     * Main program.
+     */
+    public static function main() {
+        self::run(new ConcreteFactory());
+        //self::run(new ConcreteFactory2());
+        //self::run(new ConcreteFactory3());
+    }
+ 
+    /**
+     * 调用工厂实例生成产品，输出产品名
+     * @param   $factory    AbstractFactory     工厂实例
+     */
+    public static function run(AbstractFactory $factory) {
+        $productA = $factory->createProductA();
+        echo $productA->getName(), '<br />';
+    }
+ 
+}
+ 
+Client::main();
+?>
+
+
+```
+
+
+##策略模式<a name="6"></a>
+
+###定义
+封装一系列的算法，使得他们之间可以相互替换，本模式使用算法独立于使用它的客户的变化。
+
+###说明
+策略模式作用在于，行为实现的不可预见，面对这样的一种变化，我们得思考如何使用程序好维跟扩展，并使得客户很好的使用算法的方式；
+
+###应用场景
+1. 多个类的分别只是在于行为不同
+2. 你需要对行为的算法做很多变动
+3. 客户不知道算法要使用的数据
+
+###使用策略模式编写表单验证
+```
+//普通方法写的验证
+validator = {
+    validate: function (value, type) {
+        switch (type) {
+            case 'isNonEmpty ':
+                {
+                    return true; // NonEmpty 验证结果
+                }
+            case 'isNumber ':
+                {
+                    return true; // Number 验证结果
+                    break;
+                }
+            case 'isAlphaNum ':
+                {
+                    return true; // AlphaNum 验证结果
+                }
+            default:
+                {
+                    return true;
+                }
+        }
+    }
+};
+//  测试
+alert(validator.validate("123", "isNonEmpty"));
+```
+
+```
+//策略模式改进
+var validator = {
+
+    // 所有可以的验证规则处理类存放的地方，后面会单独定义
+    types: {},
+
+    // 验证类型所对应的错误消息
+    messages: [],
+
+    // 当然需要使用的验证类型
+    config: {},
+
+    // 暴露的公开验证方法
+    // 传入的参数是 key => value对
+    validate: function (data) {
+
+        var i, msg, type, checker, result_ok;
+
+        // 清空所有的错误信息
+        this.messages = [];
+
+        for (i in data) {
+            if (data.hasOwnProperty(i)) {
+
+                type = this.config[i];  // 根据key查询是否有存在的验证规则
+                checker = this.types[type]; // 获取验证规则的验证类
+
+                if (!type) {
+                    continue; // 如果验证规则不存在，则不处理
+                }
+                if (!checker) { // 如果验证规则类不存在，抛出异常
+                    throw {
+                        name: "ValidationError",
+                        message: "No handler to validate type " + type
+                    };
+                }
+					// 使用查到到的单个验证类进行验证
+
+                result_ok = checker.validate(data[i]);                 
+                if (!result_ok) {
+                    msg = "Invalid value for *" + i + "*, " + checker.instructions;
+                    this.messages.push(msg);
+                }
+            }
+        }
+        return this.hasErrors();
+    },
+
+    // helper
+    hasErrors: function () {
+        return this.messages.length !== 0;
+    }
+};
+
+// 验证给定的值是否不为空
+validator.types.isNonEmpty = {
+    validate: function (value) {
+        return value !== "";
+    },
+    instructions: "传入的值不能为空"
+};
+
+// 验证给定的值是否是数字
+validator.types.isNumber = {
+    validate: function (value) {
+        return !isNaN(value);
+    },
+    instructions: "传入的值只能是合法的数字，例如：1, 3.14 or 2010"
+};
+
+// 验证给定的值是否只是字母或数字
+validator.types.isAlphaNum = {
+    validate: function (value) {
+        return !/[^a-z0-9]/i.test(value);
+    },
+    instructions: "传入的值只能保护字母和数字，不能包含特殊字符"
+};
+
+//使用的时候，我们首先要定义需要验证的数据集合，然后还需要定义每种数据需要验证的规则类型，代码如下：
+
+var data = {
+    first_name: "Tom",
+    last_name: "Xu",
+    age: "unknown",
+    username: "TomXu"
+};
+
+validator.config = {
+    first_name: 'isNonEmpty',
+    age: 'isNumber',
+    username: 'isAlphaNum'
+};
+
+//最后，获取验证结果的代码就简单了：
+
+validator.validate(data);
+if (validator.hasErrors()) {
+    console.log(validator.messages.join("\n"));
+}
+```
+
+
+
+
+
+
+
+
+
+
